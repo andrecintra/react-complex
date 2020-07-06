@@ -1,18 +1,17 @@
 import React, {useContext} from 'react'
 import {Link} from 'react-router-dom'
 import DispatchContext from '../DispatchContext';
+import StateContext from '../StateContext';
+
 
 function HeaderLoggedIn(props) {
 
     const appDispatch = useContext(DispatchContext)
+    const appState = useContext(StateContext)
 
     async function handleLogout() {
 
         appDispatch({type: "logout"})
-
-        localStorage.removeItem("complexappToken")
-        localStorage.removeItem("complexappUsername")
-        localStorage.removeItem("complexappAvatar")
 
     }
 
@@ -26,7 +25,7 @@ function HeaderLoggedIn(props) {
                 <span className="chat-count-badge text-white"> </span>
             </span>
             <a href="#" className="mr-2">
-                <img className="small-header-avatar" src={localStorage.getItem("complexappAvatar")} />
+                <img className="small-header-avatar" src={appState.user.avatar} />
             </a>
             <Link className="btn btn-sm btn-success mr-2" to="/create-post">
                 Create Post

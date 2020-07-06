@@ -1,6 +1,7 @@
-import React, { useState, useReducer } from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import { useImmerReducer } from 'use-immer'
 
 import StateContext from "./StateContext"
 import DispatchContext from "./DispatchContext"
@@ -23,27 +24,46 @@ Axios.defaults.baseURL = "http://localhost:8080"
 function Main() {
     const initialState = {
         loggedIn: Boolean(localStorage.getItem("complexappToken")),
-        flashMessages: []
+        flashMessages: [],
+        user: {
+            token: localStorage.getItem("complexappToken"),
+            username: localStorage.getItem("complexappUsername"),
+            avatar: localStorage.getItem("complexappAvatar")
+        }
     }
 
-    function ourReducer(state, action) {
+    function ourReducer(draft, action) {
         switch (action.type) {
             case "login":
-                return { loggedIn: true, flashMessages: state.flashMessages }
-
+                draft.loggedIn = true
+                draft.user = action.data
+                break;
             case "logout":
-
-                return { loggedIn: false, flashMessages: state.flashMessages }
+                draft.loggedIn = false
+                break;
             case "flashMessage":
-
-                return { loggedIn: state.loggedIn, flashMessages: state.flashMessages.concat(action.value) }
-
+                draft.flashMessages.push(action.value)
+                break;
             default:
                 break;
         }
     }
 
-    const [state, dispatch] = useReducer(ourReducer, initialState)
+    const [state, dispatch] = useImmerReducer(ourReducer, initialState)
+
+    useEffect(() => {
+
+        if (state.loggedIn) {
+            localStorage.setItem("complexappToken", state.user.token)
+            localStorage.setItem("complexappUsername", state.user.username)
+            localStorage.setItem("complexappAvatar", state.user.avatar)
+        } else {
+            localStorage.removeItem("complexappToken")
+            localStorage.removeItem("complexappUsername")
+            localStorage.removeItem("complexappAvatar")
+        }
+
+    }, [state.loggedIn])
 
     return (
         <StateContext.Provider value={state}>
