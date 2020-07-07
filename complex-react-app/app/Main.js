@@ -15,6 +15,7 @@ import Home from './components/Home'
 import CreatePost from './components/CreatePost'
 import ViewSinglePost from './components/ViewSinglePost'
 import FlashMessages from './components/FlashMessages'
+import Profile from './components/Profile'
 
 import Axios from 'axios';
 
@@ -86,6 +87,9 @@ function Main() {
                         </Route>
                         <Route path="/post/:id" exact>
                             <ViewSinglePost />
+                        </Route>
+                        <Route path="/profile/:username" exact>
+                            <Profile />
                         </Route>
                     </Switch>
                     <Footer />
