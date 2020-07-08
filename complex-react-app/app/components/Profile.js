@@ -22,6 +22,8 @@ function Profile() {
     })
 
     useEffect(() => {
+        const ourRequest = Axios.CancelToken.source();
+
         (async () => {
             try {
                 const response = await Axios.post(`/profile/${username}`, { token: appState.user.token })
@@ -30,6 +32,10 @@ function Profile() {
                 console.log(error)
             }
         })();
+
+        return () => {
+            ourRequest.cancel();
+        }
     }, [])
 
     return (

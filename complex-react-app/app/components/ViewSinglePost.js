@@ -3,6 +3,9 @@ import Page from './Page'
 import { useParams, Link } from 'react-router-dom'
 import Axios from 'axios'
 import moment from 'moment'
+import LoadingDotsIcon from './LoadingDotsIcon'
+import ReactMarkdown from 'react-markdown'
+import ReactTooltip from 'react-tooltip'
 
 function ViewSinglePost() {
     const [isLoading, setIsLoading] = useState(true)
@@ -11,21 +14,27 @@ function ViewSinglePost() {
     const {id} = useParams();
 
     useEffect(() => {
+        const ourRequest = Axios.CancelToken.source();
+
         (async () => {
             try {
-                const response = await Axios.get(`/post/${id}`)
+                const response = await Axios.get(`/post/${id}`, {cancelToken: ourRequest.token})
                 setPosts(response.data)
                 setIsLoading(false)
             } catch (error) {
                 console.log(error)
             }
         })();
+
+        return () => {
+            ourRequest.cancel();
+        }
     }, [])
 
     if (isLoading) {
         return (
             <Page title="...">
-                <div>Loading...</div>
+                <LoadingDotsIcon/>
             </Page>
         )
     }
@@ -35,8 +44,11 @@ function ViewSinglePost() {
             <div className="d-flex justify-content-between">
                 <h2>{post.title}</h2>
                 <span className="pt-2">
-                    <a href="#" className="text-primary mr-2" title="Edit"><i className="fas fa-edit"></i></a>
-                    <a className="delete-post-button text-danger" title="Delete"><i className="fas fa-trash"></i></a>
+                    <Link to={`/post/${post._id}/edit`} data-tip="Edit" data-for="edit" className="text-primary mr-2"><i className="fas fa-edit"></i></Link>
+                    <ReactTooltip id="edit" className="custom-tolltip" />
+                    {" "}
+                    <a data-tip="Delete" data-for="delete" className="delete-post-button text-danger"><i className="fas fa-trash"></i></a>
+                    <ReactTooltip id="delete" className="custom-tolltip" />
                 </span>
             </div>
 
@@ -48,7 +60,7 @@ function ViewSinglePost() {
             </p>
 
             <div className="body-content">
-                {post.body}
+                <ReactMarkdown source={post.body} />
             </div>
         </Page>
     )

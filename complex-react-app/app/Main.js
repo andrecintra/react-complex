@@ -16,6 +16,7 @@ import CreatePost from './components/CreatePost'
 import ViewSinglePost from './components/ViewSinglePost'
 import FlashMessages from './components/FlashMessages'
 import Profile from './components/Profile'
+import EditPost from './components/EditPost'
 
 import Axios from 'axios';
 
@@ -90,6 +91,9 @@ function Main() {
                         </Route>
                         <Route path="/profile/:username" exact>
                             <Profile />
+                        </Route>
+                        <Route path="/post/:id/edit" exact>
+                            <EditPost />
                         </Route>
                     </Switch>
                     <Footer />
