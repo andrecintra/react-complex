@@ -17,6 +17,7 @@ import ViewSinglePost from './components/ViewSinglePost'
 import FlashMessages from './components/FlashMessages'
 import Profile from './components/Profile'
 import EditPost from './components/EditPost'
+import NotFound from './components/NotFound'
 
 import Axios from 'axios';
 
@@ -94,6 +95,9 @@ function Main() {
                         </Route>
                         <Route path="/post/:id/edit" exact>
                             <EditPost />
+                        </Route>
+                        <Route>
+                            <NotFound />
                         </Route>
                     </Switch>
                     <Footer />
