@@ -18,8 +18,10 @@ import FlashMessages from './components/FlashMessages'
 import Profile from './components/Profile'
 import EditPost from './components/EditPost'
 import NotFound from './components/NotFound'
+import Search from './components/Search'
 
 import Axios from 'axios';
+import {CSSTransition} from 'react-transition-group'
 
 Axios.defaults.baseURL = "http://localhost:8080"
 
@@ -32,7 +34,8 @@ function Main() {
             token: localStorage.getItem("complexappToken"),
             username: localStorage.getItem("complexappUsername"),
             avatar: localStorage.getItem("complexappAvatar")
-        }
+        },
+        isSearchOpen: false
     }
 
     function ourReducer(draft, action) {
@@ -46,6 +49,12 @@ function Main() {
                 break;
             case "flashMessage":
                 draft.flashMessages.push(action.value)
+                break;
+            case "openSearch":
+                draft.isSearchOpen = true
+                break;
+            case "closeSearch":
+                draft.isSearchOpen = false
                 break;
             default:
                 break;
@@ -100,6 +109,9 @@ function Main() {
                             <NotFound />
                         </Route>
                     </Switch>
+                    <CSSTransition timeout={330} in={state.isSearchOpen} classNames="search-overlay" unmountOnExit>
+                        <Search />
+                    </CSSTransition>
                     <Footer />
                 </BrowserRouter>
             </DispatchContext.Provider>
