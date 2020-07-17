@@ -21,7 +21,8 @@ import NotFound from './components/NotFound'
 import Search from './components/Search'
 
 import Axios from 'axios';
-import {CSSTransition} from 'react-transition-group'
+import { CSSTransition } from 'react-transition-group'
+import Chat from './components/Chat';
 
 Axios.defaults.baseURL = "http://localhost:8080"
 
@@ -35,7 +36,8 @@ function Main() {
             username: localStorage.getItem("complexappUsername"),
             avatar: localStorage.getItem("complexappAvatar")
         },
-        isSearchOpen: false
+        isSearchOpen: false,
+        isChatOpen: false
     }
 
     function ourReducer(draft, action) {
@@ -55,6 +57,12 @@ function Main() {
                 break;
             case "closeSearch":
                 draft.isSearchOpen = false
+                break;
+            case "toogleChat":
+                draft.isChatOpen = !draft.isChatOpen;
+                break;
+            case "closeChat":
+                draft.isChatOpen = false
                 break;
             default:
                 break;
@@ -114,6 +122,7 @@ function Main() {
                     <CSSTransition timeout={330} in={state.isSearchOpen} classNames="search-overlay" unmountOnExit>
                         <Search />
                     </CSSTransition>
+                    <Chat />
                     <Footer />
                 </BrowserRouter>
             </DispatchContext.Provider>
