@@ -105,6 +105,8 @@ function Main() {
                         <Route path="/post/:id/edit" exact>
                             <EditPost />
                         </Route>
+                        <Route path="/profile/:username/followers" component={Profile}></Route>
+                        <Route path="/profile/:username/following" component={Profile}></Route>
                         <Route>
                             <NotFound />
                         </Route>
