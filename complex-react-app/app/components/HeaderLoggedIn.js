@@ -13,6 +13,7 @@ function HeaderLoggedIn(props) {
     async function handleLogout() {
 
         appDispatch({ type: "logout" })
+        appDispatch({type: "flashMessage", value: "You have succesfully logged out."})
 
     }
 

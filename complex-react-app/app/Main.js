@@ -92,6 +92,28 @@ function Main() {
 
     }, [state.loggedIn])
 
+    useEffect(() => {
+        if (state.loggedIn) {
+            const ourRequest = Axios.CancelToken.source();
+            
+            (async()=> {
+                try {
+                    const response = await Axios.post('/checkToken', {token: state.user.token}, {cancelToken: ourRequest.token})
+
+                    if(!response.data){
+                        dispatch({type: "logout"})
+                        dispatch({type: "flashMesage", value: "Your sessions has expired. Please log in again."})
+                    }
+                    
+                } catch (error) {
+                    console.log(error)
+                }
+            })()
+
+            return () => ourRequest.cancel()
+        }
+    }, [])
+
     return (
         <StateContext.Provider value={state}>
             <DispatchContext.Provider value={dispatch}>
